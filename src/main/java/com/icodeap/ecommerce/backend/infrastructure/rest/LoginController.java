@@ -1,5 +1,6 @@
 package com.icodeap.ecommerce.backend.infrastructure.rest;
 
+import com.icodeap.ecommerce.backend.infrastructure.dto.JWTClient;
 import com.icodeap.ecommerce.backend.infrastructure.dto.UserDTO;
 import com.icodeap.ecommerce.backend.infrastructure.jwt.JWTGenerator;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String>  login(@RequestBody UserDTO userDTO){
+    public ResponseEntity<JWTClient>  login(@RequestBody UserDTO userDTO){
         Authentication authentication = authenticationManager.authenticate(
                new  UsernamePasswordAuthenticationToken( userDTO.username(), userDTO.password())
         );
@@ -38,9 +39,10 @@ public class LoginController {
         log.info("Rol de user: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
 
         String token = jwtGenerator.getToken(userDTO.username());
+        JWTClient jwtClient = new JWTClient(token);
 
 
 
-        return  new ResponseEntity<>("Usuario logueado satisfactoriamente: "+ token, HttpStatus.OK);
+        return  new ResponseEntity<>(jwtClient, HttpStatus.OK);
     }
 }
