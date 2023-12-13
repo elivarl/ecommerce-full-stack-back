@@ -1,6 +1,7 @@
 package com.icodeap.ecommerce.backend.infrastructure.rest;
 
 import com.icodeap.ecommerce.backend.infrastructure.dto.UserDTO;
+import com.icodeap.ecommerce.backend.infrastructure.jwt.JWTGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/security")
+@RequestMapping("/api/v1/security")
 @Slf4j
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
+    private final JWTGenerator jwtGenerator;
 
-    public LoginController(AuthenticationManager authenticationManager) {
+    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @PostMapping("/login")
@@ -34,7 +37,10 @@ public class LoginController {
 
         log.info("Rol de user: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
 
+        String token = jwtGenerator.getToken(userDTO.username());
 
-        return  new ResponseEntity<>("Usuario logueado satisfactgoriamente", HttpStatus.OK);
+
+
+        return  new ResponseEntity<>("Usuario logueado satisfactoriamente: "+ token, HttpStatus.OK);
     }
 }

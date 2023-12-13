@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/admin/categories")
+@RequestMapping("/api/v1/admin/categories")
 @Slf4j
 @CrossOrigin("http://localhost:4200")
 public class CategoryController {
