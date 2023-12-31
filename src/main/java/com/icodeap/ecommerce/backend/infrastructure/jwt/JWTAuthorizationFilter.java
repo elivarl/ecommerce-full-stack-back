@@ -9,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,10 +17,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.nio.charset.MalformedInputException;
 
+import static com.icodeap.ecommerce.backend.infrastructure.jwt.Constants.HEADER_AUTHORIZATION;
 import static com.icodeap.ecommerce.backend.infrastructure.jwt.JWTValidate.*;
 
 
 @Component
+@Slf4j
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
     private CustomUserDetailService customUserDetailService;
 
@@ -44,7 +47,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         }catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e){
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            log.info("doFilterInternal {}", e.toString());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }

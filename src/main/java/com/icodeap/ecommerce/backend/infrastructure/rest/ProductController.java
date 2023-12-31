@@ -22,7 +22,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> save(@RequestParam("id") Integer id,
+        public ResponseEntity<Product> save(@RequestParam("id") Integer id,
                                         @RequestParam("code") String code,
                                         @RequestParam("name") String name,
                                         @RequestParam("description") String  description,
